@@ -84,7 +84,6 @@ int main(void)
 		if (Render->isRenderTiming())
 		{
 			Render->Update(Cube);
-
 			Render->isPhysicRender();
 
 			//충돌체크 반짝이 속도 증가용 지구 및 속도 감소용 달과 태양의 충돌 체크
@@ -96,6 +95,8 @@ int main(void)
 					fast[i]->shutDown();
 
 					Mecury->gliter_speed += 0.01;
+
+					printf("%f", Mecury->gliter_speed);
 				}
 
 				if (slow[i]->collision_check)

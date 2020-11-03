@@ -132,6 +132,11 @@ void Renderer::isPhysicRender()
 						a.at(j)->collision_check = false;
 					}
 				}
+
+				if(a.at(i)->vertices.empty())
+				{
+					a.at(i)->collision_check = false;
+				}
 			}
 
 			if (a.at(i)->IsCharacter)

@@ -98,15 +98,11 @@ public:
 			{
 				DrawObject(a.at(i));
 			}
-			else
-			{
-				a.at(i)->collision_check = false;
-			}
+		}
 
-			if (!isStart)
-			{
-				GameStart();
-			}
+		if (!isStart)
+		{
+			GameStart();
 		}
 	}
 
