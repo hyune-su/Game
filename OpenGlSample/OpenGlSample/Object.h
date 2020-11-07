@@ -1,6 +1,7 @@
 #pragma once
-#include <vector>
 #include "ICleanUp.h"
+
+#include <vector>
 
 #include "include/GL/glew.h"
 #include "include/GLFW/glfw3.h"
@@ -14,6 +15,7 @@ private:
 
 public:
 	bool res;
+	bool isData = false;
 	bool isPlus = false;
 	bool isGliter = false;
 	bool IsCharacter = false;
@@ -21,14 +23,17 @@ public:
 	bool collision_check = false;
 	bool isMove = false;
 
+	const char* dds = "еб╬Г.DDS";
+	const char* obj = "sphere.obj";
+
 	double alpha = 1.0;
 	double x_speed = 0.15;
 	double y_speed = 0.15;
 	double gliter_speed;
-	double area_min_x = -INFINITY;
-	double area_max_x = INFINITY;
-	double area_min_y = -INFINITY;
-	double area_max_y = INFINITY;
+	float area_min_x = -INFINITY;
+	float area_max_x = INFINITY;
+	float area_min_y = -INFINITY;
+	float area_max_y = INFINITY;
 	glm::vec3 object_pos = glm::vec3(0, 0, 0);
 
 	GLuint Texture;

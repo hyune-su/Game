@@ -801,6 +801,9 @@
     <ClInclude Include="IRender.h">
       <Filter>소스 파일\헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="AddObject.h">
+      <Filter>소스 파일\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="glm\detail\func_common.inl">
@@ -1232,6 +1235,9 @@
     </ClCompile>
     <ClCompile Include="송현수_20161642_sphere.cpp">
       <Filter>소스 파일\CPP 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AddObject.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

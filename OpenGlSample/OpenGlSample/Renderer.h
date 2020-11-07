@@ -1,16 +1,18 @@
 #pragma once
-#include "FileManager.h"
-#include "Object.h"
+#include "RenderableObject.h"
 #include "IRender.h"
 #include "IUpdater.h"
+
+#include "AddObject.h"
+
+#include <fstream>
+#include <sstream>
 #include <Windows.h>
 
 class Renderer : public RenderableObject, public IRender {
 
 private:
-	std::vector<RenderableObject*> a;
-
-	glm::vec3 cam_World = glm::vec3(0, 5, 7);
+	glm::vec3 cam_World = glm::vec3(0, 0, 20);
 	glm::vec3 cam_Lookat = glm::vec3(0, 0, 0);
 	glm::vec3 cam_Headup = glm::vec3(0, 1, 0);
 
@@ -46,8 +48,8 @@ private:
 	LONGLONG _perFrame;
 
 public:
-
 	Renderer();
+
 	bool isEND();
 	bool isRenderTiming();
 	void GameStart();
@@ -56,13 +58,13 @@ public:
 	void SetCamera_World(int x, int y, int z);
 	void SetCamera_Lookat(int x, int y, int z);
 	void SetCamera_Headup(int x, int y, int z);
-	void DrawObject(RenderableObject* src);
+	void DrawObject(Object* src);
 	GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_path);
 	void SetShader(const char* vs, const char* fs);
 
-	void hideObject(RenderableObject* src)
+	void hideObject(Object* src)
 	{
-		a.clear();
+		AddObject::instance()->a.clear();
 	}
 
 	void Update(IUpdater* src)
@@ -79,7 +81,7 @@ public:
 
 	virtual void addObject(RenderableObject* src) override
 	{
-		a.push_back(src);
+
 	}
 
 	//화면 렌더링 부분과 객체 출력 부분을 나누기 >> 게임의 시작과 끝을 정할 수 있을 것 같음
@@ -92,11 +94,18 @@ public:
 
 		glUseProgram(programID);
 
-		for (int i = 0; i < a.size(); i++)
+		for (int i = 0; i < AddObject::instance()->a.size(); i++)
 		{
-			if (!a.at(i)->vertices.empty())
+			if (AddObject::instance()->a.at(i)->vertices.empty())
 			{
-				DrawObject(a.at(i));
+				//해당 객체의 버텍스가 비어있다면 데이터가 없는 것이므로 파일매니저에서 데이터를 받아와서 저장
+				//렌더링 하지 않을 객체는? 업데이트만 할 객체는?
+				FileManager::instance()->GetData(AddObject::instance()->a.at(i));
+			}
+			else
+			{
+				//해당 객체의 버텍스가 비어있지 않다면 데이터가 있는 것이므로 해당 객체를 그려줌
+				DrawObject(AddObject::instance()->a.at(i));
 			}
 		}
 

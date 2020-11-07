@@ -1,5 +1,4 @@
 #pragma once
-#include "FileManager.h"
 #include "Renderer.h"
 
 Renderer::Renderer()
@@ -55,6 +54,8 @@ Renderer::Renderer()
 
 	glEnable(GL_CULL_FACE);
 
+	SetShader("송현수_20161642_vs.shader", "송현수_20161642_fs.shader");
+
 	ProjectionMatrix = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 
 	ViewMatrix = glm::lookAt(cam_World, cam_Lookat, cam_Headup);
@@ -84,7 +85,7 @@ bool Renderer::isRenderTiming()
 {
 	QueryPerformanceCounter(&_nowFrameCounter);
 
-	double time_distance = _nowFrameCounter.QuadPart - _prevFrameCounter.QuadPart;
+	LONGLONG time_distance = _nowFrameCounter.QuadPart - _prevFrameCounter.QuadPart;
 
 	if (time_distance > _perFrame)
 	{
@@ -114,57 +115,57 @@ void Renderer::isPhysicRender()
 {
 	if (isStart)
 	{
-		for (int i = 0; i < a.size(); i++)
+		for (int i = 0; i < AddObject::instance()->a.size(); i++)
 		{
-			for (int j = 0; j < a.size(); j++)
+			for (int j = 0; j < AddObject::instance()->a.size(); j++)
 			{
-				if (a.at(i)->IsCharacter == true && a.at(j)->IsCharacter == false)
+				if (AddObject::instance()->a.at(i)->IsCharacter == true && AddObject::instance()->a.at(j)->IsCharacter == false)
 				{
-					if (a.at(i)->object_pos.x - a.at(j)->object_pos.x <= 2.0f
-						&& a.at(i)->object_pos.x - a.at(j)->object_pos.x >= -2.0f
-						&& a.at(i)->object_pos.y - a.at(j)->object_pos.y <= 2.0f
-						&& a.at(i)->object_pos.y - a.at(j)->object_pos.y >= -2.0f)
+					if (AddObject::instance()->a.at(i)->object_pos.x - AddObject::instance()->a.at(j)->object_pos.x <= 2.0f
+						&& AddObject::instance()->a.at(i)->object_pos.x - AddObject::instance()->a.at(j)->object_pos.x >= -2.0f
+						&& AddObject::instance()->a.at(i)->object_pos.y - AddObject::instance()->a.at(j)->object_pos.y <= 2.0f
+						&& AddObject::instance()->a.at(i)->object_pos.y - AddObject::instance()->a.at(j)->object_pos.y >= -2.0f)
 					{
-						a.at(j)->collision_check = true;
+						AddObject::instance()->AddObject::instance()->a.at(j)->collision_check = true;
 					}
 					else
 					{
-						a.at(j)->collision_check = false;
+						AddObject::instance()->AddObject::instance()->a.at(j)->collision_check = false;
 					}
 				}
 
-				if(a.at(i)->vertices.empty())
+				if(AddObject::instance()->a.at(i)->vertices.empty())
 				{
-					a.at(i)->collision_check = false;
+					AddObject::instance()->a.at(i)->collision_check = false;
 				}
 			}
 
-			if (a.at(i)->IsCharacter)
+			if (AddObject::instance()->a.at(i)->IsCharacter)
 			{
 				if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 				{
-					a.at(i)->SetTranslate(0, a.at(i)->y_speed, 0);
+					AddObject::instance()->a.at(i)->SetTranslate(0, AddObject::instance()->a.at(i)->y_speed, 0);
 				}
 
 				if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 				{
-					a.at(i)->SetTranslate(0, -a.at(i)->y_speed, 0);
+					AddObject::instance()->a.at(i)->SetTranslate(0, -AddObject::instance()->a.at(i)->y_speed, 0);
 				}
 
 				if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 				{
-					a.at(i)->SetTranslate(a.at(i)->x_speed, 0, 0);
+					AddObject::instance()->a.at(i)->SetTranslate(AddObject::instance()->a.at(i)->x_speed, 0, 0);
 				}
 
 				if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 				{
-					a.at(i)->SetTranslate(-a.at(i)->x_speed, 0, 0);
+					AddObject::instance()->a.at(i)->SetTranslate(-AddObject::instance()->a.at(i)->x_speed, 0, 0);
 				}
 			}
 
-			if (a.at(i)->isMove)
+			if (AddObject::instance()->a.at(i)->isMove)
 			{
-				a.at(i)->IsPatrol(a.at(i)->x_speed, a.at(i)->y_speed, 0);
+				AddObject::instance()->a.at(i)->IsPatrol(AddObject::instance()->a.at(i)->x_speed, AddObject::instance()->a.at(i)->y_speed, 0);
 			}
 		}
 	}
@@ -224,7 +225,7 @@ void Renderer::computeMatricesFromInputs()
 		position -= right * deltaTime * speed;
 	}
 	
-	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
+	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up AddObject::instance()->a callback for this. It's AddObject::instance()->a bit too complicated for this beginner's tutorial, so it's disabled instead.
 	
 						   // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	ProjectionMatrix = glm::perspective(glm::radians(FoV), 4.0f / 3.0f, 0.1f, 100.0f);
@@ -257,7 +258,7 @@ void Renderer::SetCamera_Headup(int x, int y, int z)
 	ViewMatrix = glm::lookAt(cam_World, cam_Lookat, cam_Headup);
 }
 
-void Renderer::DrawObject(RenderableObject* src)
+void Renderer::DrawObject(Object* src)
 {
 	MVP = ProjectionMatrix * ViewMatrix * ModelMatrix * src->Trans_Model;
 
@@ -298,7 +299,7 @@ void Renderer::DrawObject(RenderableObject* src)
 		(void*)0
 	);
 
-	src->IsGliter(src, src->isGliter, src->gliter_speed);
+	//src->IsGliter(src, src->isGliter, src->gliter_speed);
 
 	glUniform1f(LightID, src->alpha);
 

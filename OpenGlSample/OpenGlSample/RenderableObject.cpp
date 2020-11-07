@@ -1,16 +1,25 @@
 #pragma once
+#include "RenderableObject.h"
+#include "AddObject.h"
+
 #include <stdlib.h>
 #include <time.h>
-
-#include "RenderableObject.h"
 
 RenderableObject::RenderableObject()
 {
 	Trans_Model = glm::scale(Trans_Model, glm::vec3(0.3,0.3,0.3));
+
+	SetTranslate(3.0f, 0.0f, 0.0f);
+
+	AddObject::instance()->init(this, "지구.DDS", "sphere.obj");
+	AddObject::instance()->render(this);
+
+	//다 만들어 지고서 넣어야 함 생성될 때가 아니라.
 }
 
-void RenderableObject::SetTranslate(double x, double y, double z)
+void RenderableObject::SetTranslate(float x, float y, float z)
 {
+
 	object_pos.x += x;
 	object_pos.y += y;
 	object_pos.z += z;

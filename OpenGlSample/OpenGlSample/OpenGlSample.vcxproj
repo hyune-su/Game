@@ -115,6 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AddObject.h" />
     <ClInclude Include="ICleanUp.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="glm\common.hpp" />
@@ -515,6 +516,7 @@
     <None Include="송현수_20161642_vs.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AddObject.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="makeObject.cpp" />
     <ClCompile Include="NonRenderObject.cpp" />
