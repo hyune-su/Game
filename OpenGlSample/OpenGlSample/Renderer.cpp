@@ -42,7 +42,7 @@ Renderer::Renderer()
 
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR);
-	
+
 	glfwPollEvents();
 	glfwSetCursorPos(window, 1024 / 2, 768 / 2);
 
@@ -115,129 +115,37 @@ void Renderer::isPhysicRender()
 {
 	if (isStart)
 	{
-		for (int i = 0; i < AddObject::instance()->a.size(); i++)
+		//전체 객체와의 충돌체크
+		for (int i = 0; i < AddObject::instance()->All_obj.size(); i++)
 		{
-			for (int j = 0; j < AddObject::instance()->a.size(); j++)
+			for (int j = 0; j < AddObject::instance()->All_obj.size(); j++)
 			{
-				if (AddObject::instance()->a.at(i)->IsCharacter == true && AddObject::instance()->a.at(j)->IsCharacter == false)
+				if (i != j)
 				{
-					if (AddObject::instance()->a.at(i)->object_pos.x - AddObject::instance()->a.at(j)->object_pos.x <= 2.0f
-						&& AddObject::instance()->a.at(i)->object_pos.x - AddObject::instance()->a.at(j)->object_pos.x >= -2.0f
-						&& AddObject::instance()->a.at(i)->object_pos.y - AddObject::instance()->a.at(j)->object_pos.y <= 2.0f
-						&& AddObject::instance()->a.at(i)->object_pos.y - AddObject::instance()->a.at(j)->object_pos.y >= -2.0f)
+					if (AddObject::instance()->All_obj.at(i)->object_pos.x - AddObject::instance()->All_obj.at(j)->object_pos.x <= 2.0f
+						&& AddObject::instance()->All_obj.at(i)->object_pos.x - AddObject::instance()->All_obj.at(j)->object_pos.x >= -2.0f
+						&& AddObject::instance()->All_obj.at(i)->object_pos.y - AddObject::instance()->All_obj.at(j)->object_pos.y <= 2.0f
+						&& AddObject::instance()->All_obj.at(i)->object_pos.y - AddObject::instance()->All_obj.at(j)->object_pos.y >= -2.0f)
 					{
-						AddObject::instance()->AddObject::instance()->a.at(j)->collision_check = true;
+						AddObject::instance()->AddObject::instance()->All_obj.at(j)->collision_check = true;
+
+						printf("isCollision \n");
 					}
 					else
 					{
-						AddObject::instance()->AddObject::instance()->a.at(j)->collision_check = false;
+						AddObject::instance()->AddObject::instance()->All_obj.at(j)->collision_check = false;
+
+						printf("notCollision \n");
 					}
 				}
 
-				if(AddObject::instance()->a.at(i)->vertices.empty())
+				if(AddObject::instance()->All_obj.at(i)->vertices.empty())
 				{
-					AddObject::instance()->a.at(i)->collision_check = false;
+					AddObject::instance()->All_obj.at(i)->collision_check = false;
 				}
-			}
-
-			if (AddObject::instance()->a.at(i)->IsCharacter)
-			{
-				if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-				{
-					AddObject::instance()->a.at(i)->SetTranslate(0, AddObject::instance()->a.at(i)->y_speed, 0);
-				}
-
-				if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-				{
-					AddObject::instance()->a.at(i)->SetTranslate(0, -AddObject::instance()->a.at(i)->y_speed, 0);
-				}
-
-				if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-				{
-					AddObject::instance()->a.at(i)->SetTranslate(AddObject::instance()->a.at(i)->x_speed, 0, 0);
-				}
-
-				if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-				{
-					AddObject::instance()->a.at(i)->SetTranslate(-AddObject::instance()->a.at(i)->x_speed, 0, 0);
-				}
-			}
-
-			if (AddObject::instance()->a.at(i)->isMove)
-			{
-				AddObject::instance()->a.at(i)->IsPatrol(AddObject::instance()->a.at(i)->x_speed, AddObject::instance()->a.at(i)->y_speed, 0);
 			}
 		}
 	}
-}
-
-void Renderer::computeMatricesFromInputs()
-{
-	// glfwGetTime is called only once, the first time this function is called
-	static double lastTime = glfwGetTime();
-	
-	// Compute time difference between current and last frame
-	double currentTime = glfwGetTime();
-	float deltaTime = float(currentTime - lastTime);
-	
-	// Get mouse position
-	double xpos, ypos;
-	glfwGetCursorPos(window, &xpos, &ypos);
-	
-	// Reset mouse position for next frame
-	glfwSetCursorPos(window, 1024 / 2, 768 / 2);
-	
-	// Compute new orientation
-	horizontalAngle += mouseSpeed * float(1024 / 2 - xpos);
-	verticalAngle += mouseSpeed * float(768 / 2 - ypos);
-	
-	// Direction : Spherical coordinates to Cartesian coordinates conversion
-	glm::vec3 direction(
-		cos(verticalAngle) * sin(horizontalAngle),
-		sin(verticalAngle),
-		cos(verticalAngle) * cos(horizontalAngle)
-	);
-	
-	// Right vector
-	glm::vec3 right = glm::vec3(
-		sin(horizontalAngle - 3.14f / 2.0f),
-		0,
-		cos(horizontalAngle - 3.14f / 2.0f)
-	);
-	
-	// Up vector
-	glm::vec3 up = glm::cross(right, direction);
-	
-	// Move forward
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		position += direction * deltaTime * speed;
-	}
-	// Move backward
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		position -= direction * deltaTime * speed;
-	}
-	// Strafe right
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		position += right * deltaTime * speed;
-	}
-	// Strafe left
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		position -= right * deltaTime * speed;
-	}
-	
-	float FoV = initialFoV;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up AddObject::instance()->a callback for this. It's AddObject::instance()->a bit too complicated for this beginner's tutorial, so it's disabled instead.
-	
-						   // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	ProjectionMatrix = glm::perspective(glm::radians(FoV), 4.0f / 3.0f, 0.1f, 100.0f);
-	// Camera matrix
-	ViewMatrix = glm::lookAt(
-		position,           // Camera is here
-		position + direction, // and looks here : at the same position, plus "direction"
-		up                 // Head is up (set to 0,-1,0 to look upside-down)
-	);
-	
-	// For the next frame, the "last time" will be "now"
-	lastTime = currentTime;
 }
 
 void Renderer::SetCamera_World(int x, int y, int z)

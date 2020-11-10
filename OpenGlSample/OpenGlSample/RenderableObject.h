@@ -12,6 +12,8 @@ public:
 	void SetAlpha(float a);
 	void IsGliter(RenderableObject* src, bool isgliter, double speed);
 
+	virtual void Update(RenderableObject* src) = 0;
+
 	virtual void shutDown() override 
 	{
 		Object::shutDown();

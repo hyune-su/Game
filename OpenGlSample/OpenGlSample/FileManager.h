@@ -12,6 +12,7 @@
 #include <stdlib.h>
 
 #include "RenderableObject.h"
+#include "NonRenderObject.h"
 
 #include "include/GL/glew.h"
 #include "include/GLFW/glfw3.h" 
@@ -67,12 +68,9 @@ public:
 	GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_path);
 
 	void GetData(RenderableObject* src);
-	//void GetData(NonRenderObject* src, const char* obj, const char* dds);
 
 	void SetObjectRange(RenderableObject* src, float min_x, float max_x, float min_y, float max_y);
 	void SetObject(RenderableObject* src, float x, float y, float z);
-	//void SetObject(NonRenderObject* src, float x, float y, float z);
-	//void RandomSetObject(RenderableObject* src, int min_x, int max_x, int min_y, int max_y);
 	void SetAlpha(RenderableObject* src, float a);
 	void IsGliter(RenderableObject* src, bool isgliter, double speed);
 	void SetCharacter(RenderableObject* src);

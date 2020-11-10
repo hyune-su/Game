@@ -354,24 +354,6 @@ void FileManager::GetData(RenderableObject* src)
 	glBufferData(GL_ARRAY_BUFFER, src->normals.size() * sizeof(glm::vec3), &src->normals[0], GL_STATIC_DRAW);
 }
 
-//void FileManager::GetData(NonRenderObject* src, const char* dds, const char* obj)
-//{
-//	src->Texture = LoadDDS(dds);
-//	src->res = loadOBJ(obj, src->vertices, src->uvs, src->normals);
-//
-//	glGenBuffers(1, &src->vertexbuffer);
-//	glBindBuffer(GL_ARRAY_BUFFER, src->vertexbuffer);
-//	glBufferData(GL_ARRAY_BUFFER, src->vertices.size() * sizeof(glm::vec3), &src->vertices[0], GL_STATIC_DRAW);
-//
-//	glGenBuffers(1, &src->uvbuffer);
-//	glBindBuffer(GL_ARRAY_BUFFER, src->uvbuffer);
-//	glBufferData(GL_ARRAY_BUFFER, src->uvs.size() * sizeof(glm::vec2), &src->uvs[0], GL_STATIC_DRAW);
-//
-//	glGenBuffers(1, &src->normalbuffer);
-//	glBindBuffer(GL_ARRAY_BUFFER, src->normalbuffer);
-//	glBufferData(GL_ARRAY_BUFFER, src->normals.size() * sizeof(glm::vec3), &src->normals[0], GL_STATIC_DRAW);
-//}
-
 void FileManager::SetObjectRange(RenderableObject* src, float min_x, float max_x, float min_y, float max_y)
 {
 	src->SetObjectRange(min_x, max_x, min_y, max_y);
@@ -381,16 +363,6 @@ void FileManager::SetObject(RenderableObject* src, float x, float y, float z)
 {
 	src->SetTranslate(x, y, z);
 }
-
-//void FileManager::SetObject(NonRenderObject* src, float x, float y, float z)
-//{
-//	src->SetTranslate(x, y, z);
-//}
-
-//void FileManager::RandomSetObject(RenderableObject* src, int min_x, int max_x, int min_y, int max_y)
-//{
-//	SetObject(src, min_x + rand() % (max_x-min_x), min_y + rand() % (max_y - min_y), 0);
-//}
 
 void FileManager::SetAlpha(RenderableObject* src, float a)
 {

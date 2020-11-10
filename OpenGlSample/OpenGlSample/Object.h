@@ -15,6 +15,7 @@ private:
 
 public:
 	bool res;
+	bool isRender = true;
 	bool isData = false;
 	bool isPlus = false;
 	bool isGliter = false;
@@ -23,6 +24,7 @@ public:
 	bool collision_check = false;
 	bool isMove = false;
 
+	//오류를 위한 기본 에셋
 	const char* dds = "태양.DDS";
 	const char* obj = "sphere.obj";
 

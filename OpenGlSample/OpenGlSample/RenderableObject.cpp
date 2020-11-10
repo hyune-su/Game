@@ -8,13 +8,6 @@
 RenderableObject::RenderableObject()
 {
 	Trans_Model = glm::scale(Trans_Model, glm::vec3(0.3,0.3,0.3));
-
-	SetTranslate(3.0f, 0.0f, 0.0f);
-
-	AddObject::instance()->init(this, "지구.DDS", "sphere.obj");
-	AddObject::instance()->render(this);
-
-	//다 만들어 지고서 넣어야 함 생성될 때가 아니라.
 }
 
 void RenderableObject::SetTranslate(float x, float y, float z)
@@ -73,21 +66,11 @@ void RenderableObject::IsPatrol(float x, float y, float z)
 		object_pos.y = area_min_y + 1;
 		Trans_Model = glm::translate(Trans_Model, glm::vec3(0, -(area_max_y - area_min_y) + 1, z));
 	}
-	//else if (object_pos.y <= area_min_y)
-	//{
-	//	object_pos.y = area_min_y;
-	//	Trans_Model = glm::translate(Trans_Model, glm::vec3(x, -y, z));
-	//}
-	//else if (object_pos.y >= area_max_y)
-	//{
-	//	object_pos.y = area_max_y;
-	//	Trans_Model = glm::translate(Trans_Model, glm::vec3(x, -y, z));
-	//}
-	//else
-	//{
-	//	//다른 경우의 수 확인
-	//	delete this;
-	//}
+	else
+	{
+		//다른 경우의 수 확인
+		delete this;
+	}
 }
 
 void RenderableObject::SetObjectRange(double min_x, double max_x, double min_y, double max_y)

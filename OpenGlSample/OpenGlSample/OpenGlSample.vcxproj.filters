@@ -19,6 +19,12 @@
     <Filter Include="소스 파일\CPP 파일">
       <UniqueIdentifier>{727ab8d5-552d-43d9-8dfc-f4fafa6922dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\CPP 파일\빈 소스 파일">
+      <UniqueIdentifier>{7c7f4b61-b664-4db1-bb0d-744c9fd76a10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\헤더 파일\인터페이스 헤더">
+      <UniqueIdentifier>{7422f557-3841-4d8a-8390-c9997a99f73b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glm\detail\_features.hpp">
@@ -774,15 +780,6 @@
     <ClInclude Include="FileManager.h">
       <Filter>소스 파일\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="ICleanUp.h">
-      <Filter>소스 파일\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="makeObject.h">
-      <Filter>소스 파일\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="NonRenderObject.h">
-      <Filter>소스 파일\헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>소스 파일\헤더 파일</Filter>
     </ClInclude>
@@ -795,14 +792,26 @@
     <ClInclude Include="SphereObject.h">
       <Filter>소스 파일\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="IUpdater.h">
-      <Filter>소스 파일\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="IRender.h">
-      <Filter>소스 파일\헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="AddObject.h">
       <Filter>소스 파일\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SunObject.h">
+      <Filter>소스 파일\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NonRenderObject.h">
+      <Filter>소스 파일\CPP 파일\빈 소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ICleanUp.h">
+      <Filter>소스 파일\헤더 파일\인터페이스 헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="IRender.h">
+      <Filter>소스 파일\헤더 파일\인터페이스 헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="IUpdater.h">
+      <Filter>소스 파일\헤더 파일\인터페이스 헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="makeObject.h">
+      <Filter>소스 파일\CPP 파일\빈 소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1215,29 +1224,32 @@
     <ClCompile Include="FileManager.cpp">
       <Filter>소스 파일\CPP 파일</Filter>
     </ClCompile>
-    <ClCompile Include="makeObject.cpp">
-      <Filter>소스 파일\CPP 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="NonRenderObject.cpp">
-      <Filter>소스 파일\CPP 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>소스 파일\CPP 파일</Filter>
-    </ClCompile>
     <ClCompile Include="RenderableObject.cpp">
       <Filter>소스 파일\CPP 파일</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>소스 파일\CPP 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SphereObject.cpp">
-      <Filter>소스 파일\CPP 파일</Filter>
-    </ClCompile>
     <ClCompile Include="송현수_20161642_sphere.cpp">
       <Filter>소스 파일\CPP 파일</Filter>
     </ClCompile>
     <ClCompile Include="AddObject.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\CPP 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="makeObject.cpp">
+      <Filter>소스 파일\CPP 파일\빈 소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="NonRenderObject.cpp">
+      <Filter>소스 파일\CPP 파일\빈 소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>소스 파일\CPP 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereObject.cpp">
+      <Filter>소스 파일\CPP 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SunObject.cpp">
+      <Filter>소스 파일\CPP 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
