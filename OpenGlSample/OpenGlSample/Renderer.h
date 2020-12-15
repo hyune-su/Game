@@ -3,6 +3,7 @@
 #include "RenderableObject.h"
 #include "SunObject.h"
 #include "SphereObject.h"
+#include "EnemyObject.h"
 #include "IRender.h"
 
 #include "AddObject.h"
@@ -38,10 +39,11 @@ private:
 	// Initial Field of View
 	float initialFoV = 45.0f;
 
+	bool isRender = false;
+
 	float speed = 3.0f; // 3 units / second
 	float mouseSpeed = 0.005f;
-
-	bool isStart = false;	
+	
 	int _targetFrame;
 	LARGE_INTEGER _frameInfo;
 	LARGE_INTEGER _prevFrameCounter;
@@ -49,10 +51,11 @@ private:
 	LONGLONG _perFrame;
 
 public:
-	GLFWwindow* window;
 
-	Renderer();
-	
+	GLFWwindow* window;
+	bool isStart = false;
+	int Frame = 0;
+
 	static Renderer* instance()
 	{
 		static Renderer _instance;
@@ -62,14 +65,41 @@ public:
 
 	bool isEND();
 	bool isRenderTiming();
+	void SetWindow();
 	void GameStart();
-	void isPhysicRender();
+	void isPhysicRender(Object* src);
 	void SetCamera_World(int x, int y, int z);
 	void SetCamera_Lookat(int x, int y, int z);
 	void SetCamera_Headup(int x, int y, int z);
 	void DrawObject(Object* src);
-	GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_path);
+	GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path);
 	void SetShader(const char* vs, const char* fs);
+
+	virtual void Init() override
+	{
+		for (int i = 0; i < AddObject::instance()->All_obj.size(); i++)
+		{
+			AddObject::instance()->All_obj.at(i)->Init();
+		}
+
+		for (int i = 0; i < AddObject::instance()->Nonrender_obj.size(); i++)
+		{
+			if (AddObject::instance()->Nonrender_obj.at(i)->vertices.empty())
+			{
+				FileManager::instance()->GetData(AddObject::instance()->Nonrender_obj.at(i));
+			}
+		}
+
+		for (int i = 0; i < AddObject::instance()->Render_obj.size(); i++)
+		{
+			if (AddObject::instance()->Render_obj.at(i)->vertices.empty())
+			{
+				//해당 객체의 버텍스가 비어있다면 데이터가 없는 것이므로 파일매니저에서 데이터를 받아와서 저장
+				//렌더링 하지 않을 객체는? 업데이트만 할 객체는?
+				FileManager::instance()->GetData(AddObject::instance()->Render_obj.at(i));
+			}
+		}
+	}
 
 	virtual void Update(RenderableObject* src) override
 	{
@@ -86,6 +116,10 @@ public:
 	//화면 렌더링 부분과 객체 출력 부분을 나누기 >> 게임의 시작과 끝을 정할 수 있을 것 같음
 	virtual void render() override
 	{
+		SetWindow();
+
+		Init();
+
 		do
 		{
 			glfwSwapBuffers(window);
@@ -100,36 +134,26 @@ public:
 				GameStart();
 			}
 
-			for (int i = 0; i < AddObject::instance()->Nonrender_obj.size(); i++)
-			{
-				if (AddObject::instance()->Nonrender_obj.at(i)->vertices.empty())
-				{
-					FileManager::instance()->GetData(AddObject::instance()->Nonrender_obj.at(i));
-				}
-			}
-
 			for (int i = 0; i < AddObject::instance()->Render_obj.size(); i++)
 			{
-				if (AddObject::instance()->Render_obj.at(i)->vertices.empty())
+				if (!AddObject::instance()->Render_obj.at(i)->vertices.empty())
 				{
-					//해당 객체의 버텍스가 비어있다면 데이터가 없는 것이므로 파일매니저에서 데이터를 받아와서 저장
-					//렌더링 하지 않을 객체는? 업데이트만 할 객체는?
-					FileManager::instance()->GetData(AddObject::instance()->Render_obj.at(i));
-				}
-				else
-				{
-					//해당 객체의 버텍스가 비어있지 않다면 데이터가 있는 것이므로 해당 객체를 그려줌
 					DrawObject(AddObject::instance()->Render_obj.at(i));
 				}
 			}
 
-			if (isRenderTiming())
+			if (isStart)
 			{
-				for (int i = 0; i < AddObject::instance()->All_obj.size(); i++)
+				if (isRenderTiming())
 				{
-
-					isPhysicRender();
-					Update(AddObject::instance()->All_obj.at(i));
+					for (int i = 0; i < AddObject::instance()->All_obj.size(); i++)
+					{
+						if (!AddObject::instance()->Render_obj.at(i)->vertices.empty())
+						{
+							isPhysicRender(AddObject::instance()->All_obj.at(i));
+							Update(AddObject::instance()->All_obj.at(i));
+						}
+					}
 				}
 			}
 

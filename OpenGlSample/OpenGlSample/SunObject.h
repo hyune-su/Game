@@ -1,7 +1,7 @@
 #pragma once
 #include "RenderableObject.h"
 #include "AddObject.h"
-#include "FileManager.h"
+#include "Renderer.h"
 
 #include <string>
 
@@ -15,20 +15,14 @@ public:
 
 	SunObject()
 	{
-		SetTranslate(3.0f, 0.0f, 0.0f);
-
-		FileManager::instance()->SetCharacter(this);
-
+		name = "태양";
 		AddObject::instance()->init(this, "태양.DDS", "sphere.obj");
 		AddObject::instance()->render(this);
 	}
 
-	virtual void Update(RenderableObject* src) override
-	{
-		static int i = 0;
-		i++;
-		printf("Render :: %d \n", i);
-	}
+	virtual void Init() override;
+
+	virtual void Update(RenderableObject* src) override;
 
 	virtual void shutDown() override
 	{

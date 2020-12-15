@@ -1,6 +1,7 @@
 #pragma once
 #include "RenderableObject.h"
 #include "AddObject.h"
+#include "Renderer.h"
 
 #include <string>
 
@@ -10,27 +11,23 @@
 
 class SphereObject : public RenderableObject {
 
-public : 
+public:
 
-	SphereObject() 
+	SphereObject()
 	{
-		SetTranslate(0.0f, 0.0f, 0.0f);
-
-		isRender = false;
-
+		name = "지구";
 		AddObject::instance()->init(this, "지구.DDS", "sphere.obj");
 		AddObject::instance()->render(this);
 	}
 
-	virtual void Update(RenderableObject* src) override
-	{
-		static int i = 0;
-		i++;
-		printf("Nonrender :: %d \n", i);
-	}
+	virtual void Init() override;
+
+	virtual void Update(RenderableObject* src) override;
 
 	virtual void shutDown() override
 	{
 		RenderableObject::shutDown();
+
+		
 	}
 };

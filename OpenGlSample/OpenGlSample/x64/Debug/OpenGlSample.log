@@ -1,9 +1,4 @@
-﻿  Renderer.cpp
+﻿  SunObject.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': 매크로 재정의
 C:\Users\whdfk\Documents\GitHub\Game\OpenGlSample\OpenGlSample\include\GLFW\glfw3.h(123): message : 'APIENTRY'의 이전 정의를 참조하십시오.
-C:\Users\whdfk\Documents\GitHub\Game\OpenGlSample\OpenGlSample\Renderer.cpp(212,26): warning C4244: '인수': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  송현수_20161642_sphere.cpp
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': 매크로 재정의
-C:\Users\whdfk\Documents\GitHub\Game\OpenGlSample\OpenGlSample\include\GLFW\glfw3.h(123): message : 'APIENTRY'의 이전 정의를 참조하십시오.
-  코드를 생성하고 있습니다...
   OpenGlSample.vcxproj -> C:\Users\whdfk\Documents\GitHub\Game\OpenGlSample\x64\Debug\OpenGlSample.exe

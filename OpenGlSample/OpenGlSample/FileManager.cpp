@@ -10,9 +10,9 @@ FileManager* FileManager::instance()
 }
 
 bool FileManager::getSimilarVertexIndex_fast(
-	PackedVertex & packed,
-	std::map<PackedVertex, unsigned short> & VertexToOutIndex,
-	unsigned short & result)
+	PackedVertex& packed,
+	std::map<PackedVertex, unsigned short>& VertexToOutIndex,
+	unsigned short& result)
 {
 	std::map<PackedVertex, unsigned short>::iterator it = VertexToOutIndex.find(packed);
 	if (it == VertexToOutIndex.end()) {
@@ -25,14 +25,14 @@ bool FileManager::getSimilarVertexIndex_fast(
 }
 
 void FileManager::indexVBO(
-	std::vector<glm::vec3> & in_vertices,
-	std::vector<glm::vec2> & in_uvs,
-	std::vector<glm::vec3> & in_normals,
+	std::vector<glm::vec3>& in_vertices,
+	std::vector<glm::vec2>& in_uvs,
+	std::vector<glm::vec3>& in_normals,
 
-	std::vector<unsigned short> & out_indices,
-	std::vector<glm::vec3> & out_vertices,
-	std::vector<glm::vec2> & out_uvs,
-	std::vector<glm::vec3> & out_normals)
+	std::vector<unsigned short>& out_indices,
+	std::vector<glm::vec3>& out_vertices,
+	std::vector<glm::vec2>& out_uvs,
+	std::vector<glm::vec3>& out_normals)
 {
 	std::map<PackedVertex, unsigned short> VertexToOutIndex;
 
@@ -60,7 +60,7 @@ void FileManager::indexVBO(
 	}
 }
 
-bool FileManager::loadOBJ(const char * path, std::vector<glm::vec3> & out_vertices, std::vector<glm::vec2> & out_uvs, std::vector<glm::vec3> & out_normals)
+bool FileManager::loadOBJ(const char* path, std::vector<glm::vec3>& out_vertices, std::vector<glm::vec2>& out_uvs, std::vector<glm::vec3>& out_normals)
 {
 	printf("Loading OBJ file %s...\n", path);
 
@@ -70,7 +70,7 @@ bool FileManager::loadOBJ(const char * path, std::vector<glm::vec3> & out_vertic
 	std::vector<glm::vec3> temp_normals;
 
 
-	FILE * file = fopen(path, "r");
+	FILE* file = fopen(path, "r");
 	if (file == NULL) {
 		printf("Impossible to open the file ! Are you in the right path ? See Tutorial 1 for details\n");
 		getchar();
@@ -153,11 +153,11 @@ bool FileManager::loadOBJ(const char * path, std::vector<glm::vec3> & out_vertic
 	return true;
 }
 
-GLuint FileManager::LoadDDS(const char * imagepath) {
+GLuint FileManager::LoadDDS(const char* imagepath) {
 
 	unsigned char header[124];
 
-	FILE *fp;
+	FILE* fp;
 
 	/* try to open the file */
 	fopen_s(&fp, imagepath, "rb");
@@ -184,7 +184,7 @@ GLuint FileManager::LoadDDS(const char * imagepath) {
 	unsigned int fourCC = *(unsigned int*)&(header[80]);
 
 
-	unsigned char * buffer;
+	unsigned char* buffer;
 	unsigned int bufsize;
 	/* how big is it going to be including all mipmaps? */
 	bufsize = mipMapCount > 1 ? linearSize * 2 : linearSize;
@@ -225,7 +225,7 @@ GLuint FileManager::LoadDDS(const char * imagepath) {
 	/* load the mipmaps */
 	for (unsigned int level = 0; level < mipMapCount && (width || height); ++level)
 	{
-		unsigned int size = ((width + 3) / 4)*((height + 3) / 4)*blockSize;
+		unsigned int size = ((width + 3) / 4) * ((height + 3) / 4) * blockSize;
 		glCompressedTexImage2D(GL_TEXTURE_2D, level, format, width, height,
 			0, size, buffer + offset);
 
@@ -246,7 +246,7 @@ GLuint FileManager::LoadDDS(const char * imagepath) {
 
 }
 
-GLuint FileManager::LoadShaders(const char * vertex_file_path, const char * fragment_file_path) {
+GLuint FileManager::LoadShaders(const char* vertex_file_path, const char* fragment_file_path) {
 
 	// 쉐이더들 생성
 	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -283,7 +283,7 @@ GLuint FileManager::LoadShaders(const char * vertex_file_path, const char * frag
 
 	// 버텍스 쉐이더를 컴파일
 	printf("Compiling shader : %s\n", vertex_file_path);
-	char const * VertexSourcePointer = VertexShaderCode.c_str();
+	char const* VertexSourcePointer = VertexShaderCode.c_str();
 	glShaderSource(VertexShaderID, 1, &VertexSourcePointer, NULL);
 	glCompileShader(VertexShaderID);
 
@@ -298,7 +298,7 @@ GLuint FileManager::LoadShaders(const char * vertex_file_path, const char * frag
 
 	// 프래그먼트 쉐이더를 컴파일
 	printf("Compiling shader : %s\n", fragment_file_path);
-	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
+	char const* FragmentSourcePointer = FragmentShaderCode.c_str();
 	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer, NULL);
 	glCompileShader(FragmentShaderID);
 
@@ -352,38 +352,4 @@ void FileManager::GetData(RenderableObject* src)
 	glGenBuffers(1, &src->normalbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, src->normalbuffer);
 	glBufferData(GL_ARRAY_BUFFER, src->normals.size() * sizeof(glm::vec3), &src->normals[0], GL_STATIC_DRAW);
-}
-
-void FileManager::SetObjectRange(RenderableObject* src, float min_x, float max_x, float min_y, float max_y)
-{
-	src->SetObjectRange(min_x, max_x, min_y, max_y);
-}
-
-void FileManager::SetObject(RenderableObject* src, float x, float y, float z)
-{
-	src->SetTranslate(x, y, z);
-}
-
-void FileManager::SetAlpha(RenderableObject* src, float a)
-{
-	src->SetAlpha(a);
-}
-
-void FileManager::IsGliter(RenderableObject* src, bool isgliter, double speed)
-{
-	src->isGliter = isgliter;
-	src->gliter_speed = speed;
-}
-
-void FileManager::SetCharacter(RenderableObject* src)
-{
-	src->IsCharacter = true;
-}
-
-void FileManager::Moving(RenderableObject* src, double x_speed, double y_speed)
-{
-	src->isMove = true;
-
-	src->x_speed = x_speed;
-	src->y_speed = y_speed;
 }

@@ -813,6 +813,9 @@
     <ClInclude Include="makeObject.h">
       <Filter>소스 파일\CPP 파일\빈 소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyObject.h">
+      <Filter>소스 파일\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="glm\detail\func_common.inl">
@@ -1249,6 +1252,9 @@
       <Filter>소스 파일\CPP 파일</Filter>
     </ClCompile>
     <ClCompile Include="SunObject.cpp">
+      <Filter>소스 파일\CPP 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyObject.cpp">
       <Filter>소스 파일\CPP 파일</Filter>
     </ClCompile>
   </ItemGroup>

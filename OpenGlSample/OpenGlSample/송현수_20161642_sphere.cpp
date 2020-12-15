@@ -8,20 +8,22 @@
 using namespace glm;
 using namespace std;
 
+Renderer* Render = Renderer::instance();
+AddObject* AddObj = AddObject::instance();
+
 int main(void)
 {
 	FileManager* Mgr = new FileManager();
 
-	Renderer* Render = new Renderer();
 
-	SunObject* src2 = new SunObject();
-	SphereObject* src = new SphereObject();
+	SphereObject* Sphere = new SphereObject();
+	SunObject* Sun = new SunObject();
+	EnemyObject* Enemy = new EnemyObject[10];
 
 	Render->render();
 
-	delete src;
-	delete src2;
-	delete Render;
+	delete Sun;
+	delete Sphere;
 	delete Mgr;
 
 	return 0;

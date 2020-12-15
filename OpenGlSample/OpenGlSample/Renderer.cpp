@@ -1,7 +1,45 @@
 #pragma once
 #include "Renderer.h"
 
-Renderer::Renderer()
+bool Renderer::isEND()
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
+		glfwWindowShouldClose(window) == 0)
+	{
+		return true;
+	}
+	else
+	{
+		glDeleteProgram(programID);
+		glDeleteVertexArrays(1, &VertexArrayID);
+
+		return false;
+	}
+}
+
+bool Renderer::isRenderTiming()
+{
+	QueryPerformanceCounter(&_nowFrameCounter);
+
+	LONGLONG time_distance = _nowFrameCounter.QuadPart - _prevFrameCounter.QuadPart;
+
+	if (time_distance > _perFrame)
+	{
+		_prevFrameCounter = _nowFrameCounter;
+
+		Frame = 0;
+
+		if (Frame++ > _targetFrame)
+		{
+			Frame = 0;
+		}
+
+		return true;
+	}
+	return false;
+}
+
+void Renderer::SetWindow()
 {
 	_targetFrame = 60;
 
@@ -65,44 +103,6 @@ Renderer::Renderer()
 	MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 }
 
-bool Renderer::isEND()
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-		glfwWindowShouldClose(window) == 0)
-	{
-		return true;
-	}
-	else
-	{
-		glDeleteProgram(programID);
-		glDeleteVertexArrays(1, &VertexArrayID);
-
-		return false;
-	}
-}
-
-bool Renderer::isRenderTiming()
-{
-	QueryPerformanceCounter(&_nowFrameCounter);
-
-	LONGLONG time_distance = _nowFrameCounter.QuadPart - _prevFrameCounter.QuadPart;
-
-	if (time_distance > _perFrame)
-	{
-		_prevFrameCounter = _nowFrameCounter;
-
-		static int count = 0;
-
-		if (count++ > _targetFrame)
-		{
-			count = 0;
-		}
-
-		return true;
-	}
-	return false;
-}
-
 void Renderer::GameStart()
 {
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
@@ -111,37 +111,27 @@ void Renderer::GameStart()
 	}
 }
 
-void Renderer::isPhysicRender()
+void Renderer::isPhysicRender(Object* src)
 {
 	if (isStart)
 	{
 		//전체 객체와의 충돌체크
 		for (int i = 0; i < AddObject::instance()->All_obj.size(); i++)
 		{
-			for (int j = 0; j < AddObject::instance()->All_obj.size(); j++)
+			if (!AddObject::instance()->All_obj.at(i)->vertices.empty())
 			{
-				if (i != j)
+				if (AddObject::instance()->AddObject::instance()->All_obj.at(i)->name != src->name)
 				{
-					if (AddObject::instance()->All_obj.at(i)->object_pos.x - AddObject::instance()->All_obj.at(j)->object_pos.x <= 2.0f
-						&& AddObject::instance()->All_obj.at(i)->object_pos.x - AddObject::instance()->All_obj.at(j)->object_pos.x >= -2.0f
-						&& AddObject::instance()->All_obj.at(i)->object_pos.y - AddObject::instance()->All_obj.at(j)->object_pos.y <= 2.0f
-						&& AddObject::instance()->All_obj.at(i)->object_pos.y - AddObject::instance()->All_obj.at(j)->object_pos.y >= -2.0f)
+					if (fabs(AddObject::instance()->All_obj.at(i)->world_pos.x - src->world_pos.x) <= 1.0f
+						&& fabs(AddObject::instance()->All_obj.at(i)->world_pos.y - src->world_pos.y) <= 1.0f)
 					{
-						AddObject::instance()->AddObject::instance()->All_obj.at(j)->collision_check = true;
+						src->collision_check = true;
+						AddObject::instance()->AddObject::instance()->All_obj.at(i)->collision_check = true;
 
-						printf("isCollision \n");
+						src->collision_name = AddObject::instance()->All_obj.at(i)->name;
+						AddObject::instance()->All_obj.at(i)->collision_name = src->name;
+						printf("isCollision :: %s :: %s \n", AddObject::instance()->All_obj.at(i)->collision_name, src->collision_name);
 					}
-					else
-					{
-						AddObject::instance()->AddObject::instance()->All_obj.at(j)->collision_check = false;
-
-						printf("notCollision \n");
-					}
-				}
-
-				if(AddObject::instance()->All_obj.at(i)->vertices.empty())
-				{
-					AddObject::instance()->All_obj.at(i)->collision_check = false;
 				}
 			}
 		}
@@ -168,7 +158,18 @@ void Renderer::SetCamera_Headup(int x, int y, int z)
 
 void Renderer::DrawObject(Object* src)
 {
-	MVP = ProjectionMatrix * ViewMatrix * ModelMatrix * src->Trans_Model;
+	if (src->isAdded)
+	{
+		MVP = ProjectionMatrix * ViewMatrix * src->parent->Move_Model * src->Move_Model * src->parent->Scale_Model * src->Scale_Model * ModelMatrix;
+
+		src->world_pos = src->object_pos + src->parent->object_pos;
+	}
+	else
+	{
+		MVP = ProjectionMatrix * ViewMatrix * src->Move_Model * src->Scale_Model * ModelMatrix;
+
+		src->world_pos = src->object_pos;
+	}
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, src->Texture);
@@ -220,7 +221,7 @@ void Renderer::DrawObject(Object* src)
 	glDisableVertexAttribArray(2);
 }
 
-GLuint Renderer::LoadShaders(const char * vertex_file_path, const char * fragment_file_path) {
+GLuint Renderer::LoadShaders(const char* vertex_file_path, const char* fragment_file_path) {
 
 	// 쉐이더들 생성
 	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -257,7 +258,7 @@ GLuint Renderer::LoadShaders(const char * vertex_file_path, const char * fragmen
 
 	// 버텍스 쉐이더를 컴파일
 	printf("Compiling shader : %s\n", vertex_file_path);
-	char const * VertexSourcePointer = VertexShaderCode.c_str();
+	char const* VertexSourcePointer = VertexShaderCode.c_str();
 	glShaderSource(VertexShaderID, 1, &VertexSourcePointer, NULL);
 	glCompileShader(VertexShaderID);
 
@@ -272,7 +273,7 @@ GLuint Renderer::LoadShaders(const char * vertex_file_path, const char * fragmen
 
 	// 프래그먼트 쉐이더를 컴파일
 	printf("Compiling shader : %s\n", fragment_file_path);
-	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
+	char const* FragmentSourcePointer = FragmentShaderCode.c_str();
 	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer, NULL);
 	glCompileShader(FragmentShaderID);
 

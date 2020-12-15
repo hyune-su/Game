@@ -1,20 +1,28 @@
 #pragma once
 #include "AddObject.h"
 
-AddObject* AddObject::instance()
-{
-	static AddObject _instance;
-
-	return &_instance;
-}
-
 void AddObject::init(RenderableObject* src, const char* dds, const char* obj)
 {
 	src->dds = dds;
 	src->obj = obj;
 }
-//해당 객체의 dds와 obj를 저장함
 
+void AddObject::Add(RenderableObject* me, const char* name)
+{
+	for (int i = 0; i < All_obj.size(); i++)
+	{
+		if (All_obj.at(i)->name == name)
+		{
+			me->isAdded = true;
+
+			me->parent = All_obj.at(i);
+
+			me->object_pos += All_obj.at(i)->object_pos;
+		}
+	}
+}
+
+//해당 객체의 dds와 obj를 저장함
 void AddObject::render(RenderableObject* src)
 {
 	All_obj.push_back(src);

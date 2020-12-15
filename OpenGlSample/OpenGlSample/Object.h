@@ -14,17 +14,21 @@ class Object : public ICleanUp {
 private:
 
 public:
+	Object* parent;
+
 	bool res;
 	bool isRender = true;
 	bool isData = false;
 	bool isPlus = false;
-	bool isGliter = false;
-	bool IsCharacter = false;
 	bool out_Area = false;
 	bool collision_check = false;
 	bool isMove = false;
+	bool isAdded = false;
+	bool isDead = false;
 
 	//오류를 위한 기본 에셋
+	const char* name = "오브젝트";
+	const char* collision_name = "충돌한 객체";
 	const char* dds = "태양.DDS";
 	const char* obj = "sphere.obj";
 
@@ -32,11 +36,11 @@ public:
 	double x_speed = 0.15;
 	double y_speed = 0.15;
 	double gliter_speed;
-	float area_min_x = -INFINITY;
-	float area_max_x = INFINITY;
-	float area_min_y = -INFINITY;
-	float area_max_y = INFINITY;
+	float Theta = 0.0f;
 	glm::vec3 object_pos = glm::vec3(0, 0, 0);
+	glm::vec3 world_pos = glm::vec3(0, 0, 0);
+
+	float object_x = 0;
 
 	GLuint Texture;
 	GLuint vertexbuffer;
@@ -47,7 +51,8 @@ public:
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> normals;
 
-	glm::mat4 Trans_Model = glm::mat4(1.0);
+	glm::mat4 Scale_Model = glm::mat4(1.0);
+	glm::mat4 Move_Model = glm::mat4(1.0);
 
 	virtual void shutDown() override
 	{
@@ -60,5 +65,7 @@ public:
 		glDeleteBuffers(1, &normalbuffer);
 
 		glDeleteTextures(1, &Texture);
+
+		isDead = true;
 	}
 };

@@ -116,6 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AddObject.h" />
+    <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="ICleanUp.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="glm\common.hpp" />
@@ -518,6 +519,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AddObject.cpp" />
+    <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="makeObject.cpp" />
     <ClCompile Include="NonRenderObject.cpp" />
