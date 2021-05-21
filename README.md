@@ -2,8 +2,6 @@
 
 이름: 송현수
 
-학번: 20161642
-
 # 구성
 
 기본 구성은 FileManager, 인터페이스 클래스 ICleanUp, IRender, IUpdater / NonRenderObject, RenderableObject / Sphere, makeObject / Object / Renderer로 구성하였습니다.
